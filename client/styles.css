@@ -1,0 +1,43 @@
+body{
+    background-color: lightgray;
+}
+
+form{
+    background-color: darkgray;
+}
+
+div{
+    background-color: darkgray;
+    border-style: groove;
+}
+
+#complimentButton{
+    background-color: darkseagreen;
+}
+
+#fortuneButton{
+    background-color: darkseagreen;
+}
+
+#activityButton{
+    background-color: darkseagreen;
+}
+
+#submit-btn{
+    color: darkseagreen;
+    background-color: black;
+    border-radius: 50%;
+}
+
+#delete-btn{
+    color: darkseagreen;
+    background-color: black;
+    border-radius: 50%;
+}
+
+h5{
+    margin: 3px;
+    font-size: large;
+    font-style: oblique;
+    font-weight: 750;
+}
