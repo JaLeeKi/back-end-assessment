@@ -1,6 +1,8 @@
-const messages = [];
+const messages = require('../messages.json')
+let id = 3
 
 module.exports = {
+
     getCompliment:(req, res) => {
         const compliments = ["Gee, you're a smart cookie!",
                            "Cool shirt!",
@@ -14,6 +16,7 @@ module.exports = {
         res.status(200).send(randomCompliment);
         
       },
+
     getFortune: (req, res) => {
         const fortunes = ["You Will Pass This Test",
                       "Your Future Is Very Bright",
@@ -26,6 +29,7 @@ module.exports = {
       
         res.status(200).send(randomFortune)
       },
+
     getActivity: (req, res) => {
         const activities = ["Ride A Bike",
                       "Go Swimming",
@@ -38,13 +42,18 @@ module.exports = {
       
         res.status(200).send(randomActivity)
       },
+
     createMessage: (req, res) => {
-        console.log(req.body);
+      let {message} = req.body
+      let newMessage = {id, message}
+      messages.push(newMessage)
+      res.status(200).send(messages)
+      id++
+    },
 
-        const message = req.body;
-
-        messages.push(message);
-
-        res.status[200].send(messages);
+    deleteMessage: (req, res) => {
+      let index = messages.findIndex(elem => elem.id === +req.params.id)
+      messages.splice(index, 1)
+      res.status(200).send(messages)
     }
 }

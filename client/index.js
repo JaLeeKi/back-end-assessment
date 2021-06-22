@@ -5,14 +5,14 @@ document.getElementById("complimentButton").onclick = function () {
           alert(data);
         });
   };
-  document.getElementById("fortuneButton").onclick = function () {
+document.getElementById("fortuneButton").onclick = function () {
     axios.get("http://localhost:4000/api/fortune/")
         .then(function (res) {
           const data = res.data;
           alert(data);  
         })
   };
-  document.getElementById("activityButton").onclick = function () {
+document.getElementById("activityButton").onclick = function () {
     axios.get("http://localhost:4000/api/activity/")
         .then(function (res) {
           const data = res.data;
@@ -20,40 +20,46 @@ document.getElementById("complimentButton").onclick = function () {
         })
   };
 
-const enterMessageContainer = document.querySelector('#enter-message-container')
-const enterMessageForm = document.querySelector('#enter-message')
-const baseURL = "http://localhost:4000/api/message/"
-const messages = [];
-
-const postMessage = function(body) {axios
-                            .post(baseURL, body)
-                            .then(res => {console.log(res.data)
-                                            displayMessages(res.data)})
-                            .catch(err => {console.log(err)})}
+const messageContainer = document.querySelector('#user-message')
+const form = document.querySelector('#enter-message') 
+const baseURL = `http://localhost:4000/api/messages`
+const messageCallback = ({ data: messages }) => displayMessages(messages)
+const errCallback = err => console.log(err)
+const createMessage = body => axios.post(baseURL, body).then(messageCallback).catch(errCallback)
+const deleteMessage = id => axios.delete(`${baseURL}/${id}`).then(messageCallback).catch(errCallback)
+const getAllMessages = () => axios.get(baseURL).then(messageCallback).catch(errCallback)
 
 function submitHandler(e) {
     e.preventDefault()
 
     let message = document.querySelector('#user-input')
 
-    postMessage(message)
+    let msgObj = {
+        message: message.value
+    }
+
+    createMessage(msgObj)
+
+    message.value = ''
 }
 
-function createMessage(data) {
+function createMessageCard(message) {
     const messageCard = document.createElement('div')
-    
     messageCard.classList.add('message-card')
 
-    messageCard.innerHTML = `<p class="message">${data}</p>`
+    messageCard.innerHTML = `<p class="message-holder">${message.message}</p>
+    <button onclick="deleteMessage(${message.id})">delete</button>`
 
-    enterMessageContainer.appendChild(messageCard)
+    messageContainer.appendChild(messageCard)
 }
 
-function displayMessages(data) {
-    enterMessageContainer.innerHTML = ``
-    for (let i = 0; i < data.message.length; i++) {
-        createMessage(data.messages[i])
-  }
+function displayMessages(arr) {
+    messageContainer.innerHTML = ``
+    for (let i = 0; i < arr.length; i++) {
+        createMessageCard(arr[i])
+    }
 }
 
-enterMessageForm.addEventListener('submit', submitHandler);
+form.addEventListener('submit', submitHandler)
+
+getAllMessages()
